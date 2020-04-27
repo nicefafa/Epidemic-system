@@ -15,16 +15,12 @@
   </div>
 </template>
 <script>
-
 import { Register } from "../../api/login";
 import { ref } from "@vue/composition-api";
 export default {
   name: "login",
   setup(props) {
-    
-    return {
-      
-    };
+    return {};
   }
 };
 </script>
