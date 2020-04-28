@@ -1,0 +1,8 @@
+.el-submenu .el-menu-item {
+    font-size: 14px;
+    font-weight: bold;
+
+    &.is-active {
+        background-color: #f56c6c !important;
+    }
+}
