@@ -1,16 +1,15 @@
-import service from "@/api/axios"
-
-
-
+import service from "../utils/axios"
 
 /**
- * 注册接口
+ * 登录接口
  * 
  */
-export function Register(data) {
+export function Login(data) {
     return service.request({
         method: 'post',
-        url: '/register/',
+        url: '/login/',
         data: data
     })
 }
+
+

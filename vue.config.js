@@ -67,7 +67,7 @@ module.exports = {
     //设置跨域
     proxy: {
       "/devApi": {
-        target: "http://www.web-jshtml.cn/productapi/token", //API服务器的地址  http://www.web-jshtml.cn/api
+        target: 'http://www.web-jshtml.cn/productapi/token', //API服务器的地址  
         changeOrigin: true,
         pathRewrite: {
           "^/devApi": ""

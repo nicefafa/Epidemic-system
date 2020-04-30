@@ -59,12 +59,19 @@
 </template>
 
 <script>
-import bus from "../../../utils/bus";
+import { computed } from "@vue/composition-api";
 export default {
   name: "layoutHeader",
+  setup(props, { root }) {
+    const username = computed(() => {
+      root.$store.state.app.username;
+    });
+    return {
+      username
+    };
+  },
   data() {
     return {
-      collapse: false,
       fullscreen: false,
       username: "合阳城",
       message: 2
@@ -74,14 +81,10 @@ export default {
     // 用户名下拉菜单选择事件
     handleCommand(command) {
       if (command == "loginout") {
-        localStorage.removeItem("ms_username");
-        this.$router.push("/login");
+        this.$store.dispatch("app/exit").then(() => {
+          this.$router.push("/login");
+        });
       }
-    },
-    // 侧边栏折叠
-    collapseChage() {
-      this.collapse = !this.collapse;
-      bus.$emit("collapse", this.collapse);
     },
     // 全屏事件
     handleFullScreen() {
@@ -120,7 +123,8 @@ export default {
 </script>
 <style lang="scss" scoped>
 .header {
-  position: relative;
+  position: fixed;
+  top: 0;
   box-sizing: border-box;
   width: 100%;
   height: 70px;
@@ -136,7 +140,7 @@ export default {
 }
 .header .logo {
   float: left;
-  width: 250px;
+  width: 300px;
   line-height: 70px;
 }
 .header-right {

@@ -1,9 +1,10 @@
 <template>
   <div id="layout">
-    <layoutHeader />
+    <div class="layout">
     <layoutNav />
-    <layoutTag/>
+    <layoutHeader />
     <layoutContent />
+    </div>
   </div>
 </template>
 
@@ -12,6 +13,7 @@ import layoutNav from "./layoutComponents/Nav";
 import layoutHeader from "./layoutComponents/header";
 import layoutContent from "./layoutComponents/content"
 
+
 export default {
   name: "layout",
   components: { layoutContent, layoutNav, layoutHeader,},
@@ -19,4 +21,8 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
+.layout{
+  width: 100%;
+  height: 100%;
+}
 </style>
