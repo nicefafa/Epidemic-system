@@ -34,24 +34,23 @@ export default {
   name: "navMenu",
   setup(props, { root }) {
     //定义变量
-    const collapse= ref(false)
+    const collapse = ref(false);
     const routers = reactive(root.$router.options.routes);
     return {
       routers,
       collapse
     };
-  },
-  
-  
+  }
 };
 </script>
 <style lang="scss" scoped>
 #Nav {
-  display: block;
-    position: absolute;
-    left: 0;
-    top: 70px;
-    bottom: 0;
+  
+  position: fixed;
+  width: 250px;
+  left: 0;
+  top: 70px;
+  bottom: 0;
   background-color: #283446;
   svg {
     font-size: 25px;
@@ -59,13 +58,8 @@ export default {
   }
 }
 .el-menu-vertical-demo:not(.el-menu--collapse) {
-    width: 250px;
-    min-height: 400px;
-  }
-.logo {
-  img {
-    width: 250px;
-    margin: auto;
-  }
+  width: 250px;
+  min-height: 400px;
 }
+
 </style>

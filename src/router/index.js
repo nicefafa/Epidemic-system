@@ -23,14 +23,15 @@ const routes = [{
   {
     path: '/console',
     name: 'console',
+    redirect:"index",
     meta: {
       name: "全区疫情情况",
       icon: "console"
     },
     component: layout,
     children: [{
-      path: '/consoleIndex',
-      name: 'consoleIndex',
+      path: '/index',
+      name: 'Index',
       meta: {
         name: "首页"
       },

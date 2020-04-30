@@ -6,14 +6,13 @@ import ElementUI from 'element-ui';
 import "../src/icons/index";
 import 'element-ui/lib/theme-chalk/index.css';
 import VueCompositionApi from "@vue/composition-api"
+import "./router/permit"
 
 Vue.config.productionTip = false
 Vue.use(ElementUI);
 Vue.use(VueCompositionApi);
 
-if (process.env.NODE_ENV==="development"){
-  require("./mock/mock")
-}
+
 new Vue({
   router,
   store,

@@ -1,6 +1,6 @@
 <template>
     <div id="comeBack">
-    <h1>comeBack</h1>
+    <span>comeBack</span>
     
     </div>
 </template>

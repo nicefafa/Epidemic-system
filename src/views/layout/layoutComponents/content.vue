@@ -1,7 +1,9 @@
 <template>
   <div id="content">
-    <div class="content-wrap">
-      <router-view />
+    <div class="main-content">
+      <div class="content-wrap">
+        <router-view />
+      </div>
     </div>
   </div>
 </template>
@@ -10,20 +12,24 @@
 export default {};
 </script>
 <style lang="scss" scoped>
+@import "../../../styles/config.scss";
 #content {
-  position: fixed;
-  left: 250px;
-  top: 70px;
-  right: 0;
-  bottom: 0;
-  background-color: #ffffff;
-  border-top: red 2px solid;
+  height: 100vh;
+}
+.main-content {
+  width: 100%;
+  height: 100%;
+  padding-top: 70px;
+  padding-right: 0px;
+  padding-left: 250px;
+  @include webkit(box-sizing, border-box);
+  @include webkit(transition, all 0.3s ease 0s);
 }
 .content-wrap {
   width: 100%;
   height: 100%;
-  padding-top: 30px;
-  padding-left: 30px;
+  padding: 30px 30px 0 30px;
   background-color: #ffffff;
+  @include webkit(box-sizing, border-box);
 }
 </style>

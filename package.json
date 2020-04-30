@@ -4,11 +4,14 @@
   "private": true,
   "scripts": {
     "serve": "vue-cli-service serve",
-    "build": "vue-cli-service build"
+    "build": "vue-cli-service build",
+    "start": "node index.js",
+    "server": "nodemon index.js --ignore client"
   },
   "dependencies": {
     "@vue/composition-api": "^0.5.0",
     "axios": "^0.19.2",
+    "cookie_js": "^1.4.0",
     "core-js": "^3.6.4",
     "element-ui": "^2.13.1",
     "mockjs": "^1.1.0",

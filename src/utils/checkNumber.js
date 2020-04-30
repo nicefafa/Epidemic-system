@@ -19,6 +19,14 @@ export function validateEmail(value) {
     return !reg.test(value) ? true : false;
 }
 /**
+ * 验证用户名
+ */
+export function validateUser(value) {
+    let reg = /^[a-zA-Z][a-zA-Z0-9_]{4,15}$/;
+    return !reg.test(value) ? true : false;
+}
+
+/**
  * 验证密码 6至20位的字母+数字 
  */
 export function validatePwd(value) {
