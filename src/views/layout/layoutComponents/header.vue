@@ -1,10 +1,5 @@
 <template>
   <div class="header">
-    <!-- 折叠按钮 -->
-    <div class="collapse-btn" @click="collapseChage">
-      <i v-if="!collapse" class="el-icon-s-fold"></i>
-      <i v-else class="el-icon-s-unfold"></i>
-    </div>
     <div class="logo">合川区疫情流动人员管理系统</div>
     <div class="header-right">
       <div class="header-user-con">
@@ -70,7 +65,7 @@ export default {
       username
     };
   },
-  data() {
+  data(){
     return {
       fullscreen: false,
       username: "合阳城",

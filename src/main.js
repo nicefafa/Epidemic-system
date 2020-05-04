@@ -7,11 +7,11 @@ import "../src/icons/index";
 import 'element-ui/lib/theme-chalk/index.css';
 import VueCompositionApi from "@vue/composition-api"
 import "./router/permit"
-
+import global from "./utils/global"
 Vue.config.productionTip = false
 Vue.use(ElementUI);
 Vue.use(VueCompositionApi);
-
+Vue.use(global);
 
 new Vue({
   router,

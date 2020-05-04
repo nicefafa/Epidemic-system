@@ -30,6 +30,7 @@ const actions = { // 可以回调处理事情
     login({commit }, requestData) {
         return new Promise((resolve, reject) => {
             Login(requestData).then((response) => {
+                console.log(response)
                 let data = response.data.data
                 commit('SET_TOKEN', data.token);
                 commit('SET_USERNAME', data.username);

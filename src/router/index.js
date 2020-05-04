@@ -23,7 +23,7 @@ const routes = [{
   {
     path: '/console',
     name: 'console',
-    redirect:"index",
+    redirect: "index",
     meta: {
       name: "全区疫情情况",
       icon: "console"
@@ -36,6 +36,13 @@ const routes = [{
         name: "首页"
       },
       component: () => import("../views/console/index")
+    }, {
+      path: '/tabs',
+      name: 'tabs',
+      meta: {
+        name: "消息通知"
+      },
+      component: () => import("../views/login/tabs")
     }]
   },
   {
