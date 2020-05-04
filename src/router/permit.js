@@ -16,7 +16,7 @@ router.beforeEach((to, from, next) => {
             //需要清空cookie和vuex里面的值
             removeToKen()
             removeUserName()
-            store.commit("app/SET_TOKEN","")
+            store.commit("app/SET_TOKEN", "")
             store.commit("app/SET_USERNAME", "")
             next()
         } else {

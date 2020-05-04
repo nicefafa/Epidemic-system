@@ -67,7 +67,8 @@ module.exports = {
     //设置跨域
     proxy: {
       "/devApi": {
-        target: 'http://www.web-jshtml.cn/productapi/token', //API服务器的地址  
+        // target: 'http://www.web-jshtml.cn/productapi/token', //API服务器的地址  
+        target: "https://www.easy-mock.com/mock/5eaa75f6d933d175e8596fae/system",
         changeOrigin: true,
         pathRewrite: {
           "^/devApi": ""
