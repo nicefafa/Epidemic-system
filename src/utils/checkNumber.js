@@ -40,3 +40,24 @@ export function validateVCode(value) {
     let reg = /^[a-z0-9]{6}$/;
     return !reg.test(value) ? true : false;
 }
+/**
+ * 验证年龄
+ */
+export function validateAge(value) {
+    let reg = /^(?:[1-9][0-9]?|1[01][0-9]|120)$/;
+    return !reg.test(value) ? true : false;
+}
+/**
+ * 验证sfz
+ */
+export function validateSfz(value) {
+    let reg = /(^\d{8}(0\d|10|11|12)([0-2]\d|30|31)\d{3}$)|(^\d{6}(18|19|20)\d{2}(0\d|10|11|12)([0-2]\d|30|31)\d{3}(\d|X|x)$)/
+    return !reg.test(value) ? true : false;
+}
+/**
+ * 验证电话号码
+ */
+export function validatePhone(value) {
+    let reg = /^(((13[0-9]{1})|(15[0-9]{1})|(18[0-9]{1}))+\d{8})$/;
+    return !reg.test(value) ? true : false;
+}
