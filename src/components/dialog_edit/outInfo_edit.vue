@@ -1,7 +1,7 @@
 <template>
   <div id="outInfo">
     <el-dialog
-      title="新增外出人员"
+      title="修改"
       :visible.sync="dialog_flag_status"
       @close="close"
       width="600px"

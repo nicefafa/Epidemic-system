@@ -1,7 +1,7 @@
 <template>
-  <div id="outInfo">
+  <div id="comeBackInfo">
     <el-dialog
-      title="新增外出人员"
+      title="修改"
       :visible.sync="dialog_flag_status"
       @close="close"
       width="600px"
@@ -65,7 +65,7 @@ import {
   validatePhone
 } from "../../utils/checkNumber";
 export default {
-  name: "outInfo",
+  name: "comeBackInfo",
   props: {
     flag: {
       type: Boolean,
@@ -146,7 +146,7 @@ export default {
     const submitForm = formName => {
       refs[formName].validate(valid => {
         if (valid) {
-          root.$message({
+         root.$message({
             message: "添加成功",
             type: "success"
           });
