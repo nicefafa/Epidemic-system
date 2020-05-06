@@ -6,15 +6,11 @@
           <label for="">日期：&nbsp;&nbsp;</label>
           <div class="warp-content">
             <el-date-picker
-              style="width: 100%;"
               v-model="date_value"
-              type="datetimerange"
+              type="datetime"
+              placeholder="选择日期时间"
               format="yyyy 年 MM 月 dd 日"
-              value-format="yyyy-MM-dd HH:mm:ss"
-              align="right"
-              start-placeholder="开始日期"
-              end-placeholder="结束日期"
-              :default-time="['12:00:00', '08:00:00']"
+              value-format="yyyy-MM-dd"
             >
             </el-date-picker>
           </div>
@@ -102,9 +98,7 @@
     <div class="bottom">
       <el-row>
         <el-col :span="9">
-          <el-button type="danger" size="medium" @click="deleteAll"
-            >批量删除</el-button
-          >
+          -
         </el-col>
         <el-col :span="15">
           <el-pagination
@@ -122,15 +116,17 @@
     </div>
     <!-- addInfo新增病例弹框 -->
     <susInfo :flag.sync="dialog_flag" />
+    <susInfo_edit :flag.sync="dialog_flag" />
   </div>
 </template>
 
 <script>
 import susInfo from "../../components/dialog/susInfo";
+import susInfo_edit from '../../components/dialog_edit/susInfo_edit';
 import { reactive, ref, watch, onMounted } from "@vue/composition-api";
 export default {
   name: "suspectedCases",
-  components: { susInfo },
+  components: { susInfo,susInfo_edit },
   setup(props, { root }) {
     const date_value = ref("");
     const search_keyWork = ref("");
@@ -202,21 +198,13 @@ export default {
         id:"13231311"
       });
     };
-    //删除全部
-    const deleteAll = () => {
-      root.confirm({
-        content: "此操作将永久删除全部文件, 是否继续?",
-        fn:fn_confirm,
-        id:"1312341"
-      });
-    };
+   
     //这里调用删除接口
     const fn_confirm = value => {
       console.log(value)
     };
 
     return {
-      deleteAll,
       deleteItem,
       dialog_flag,
       date_value,

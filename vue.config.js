@@ -80,6 +80,7 @@ module.exports = {
       warnings: true,
       errors: true
     },
+    
     before: app => {}
   },
   /**

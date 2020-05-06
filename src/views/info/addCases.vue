@@ -6,15 +6,11 @@
           <label for="">日期：&nbsp;&nbsp;</label>
           <div class="warp-content">
             <el-date-picker
-              style="width: 100%;"
               v-model="date_value"
-              type="datetimerange"
+              type="datetime"
+              placeholder="选择日期时间"
               format="yyyy 年 MM 月 dd 日"
-              value-format="yyyy-MM-dd HH:mm:ss"
-              align="right"
-              start-placeholder="开始日期"
-              end-placeholder="结束日期"
-              :default-time="['12:00:00', '08:00:00']"
+              value-format="yyyy-MM-dd"
             >
             </el-date-picker>
           </div>
@@ -43,7 +39,9 @@
         ></el-input>
       </el-col>
       <el-col :span="2">
-        <el-button type="info" style="width:80%;">搜索</el-button>
+        <el-button type="info" style="width:80%;" @click="search_run"
+          >搜索</el-button
+        >
       </el-col>
 
       <el-col :span="4">
@@ -71,7 +69,11 @@
         ></el-table-column>
         <el-table-column prop="name" label="姓名" width="100"></el-table-column>
         <el-table-column prop="age" label="年龄" width="60"></el-table-column>
-        <el-table-column prop="phone" label="电话号码" width="130"></el-table-column>
+        <el-table-column
+          prop="phone"
+          label="电话号码"
+          width="130"
+        ></el-table-column>
         <el-table-column
           prop="address"
           label="家庭地址"
@@ -91,7 +93,7 @@
           <!-- 编辑和删除-->
           <template slot-scope="scope">
             <el-button size="mini" @click="dialog_flag = true">编辑</el-button>
-            <el-button size="mini" type="danger" @click="deleteItem"
+            <el-button size="mini" type="danger" @click="deleteItem(scope.row)"
               >删除</el-button
             >
           </template>
@@ -102,9 +104,7 @@
     <div class="bottom">
       <el-row>
         <el-col :span="9">
-          <el-button type="danger" size="medium" @click="deleteAll"
-            >批量删除</el-button
-          >
+          -
         </el-col>
         <el-col :span="15">
           <el-pagination
@@ -112,7 +112,7 @@
             background
             @size-change="handleSizeChange"
             @current-change="handleCurrentChange"
-            :page-sizes="[10, 20, 50, 100]"
+            :page-sizes="[1, 2, 5, 10]"
             layout="total, sizes, prev, pager, next, jumper"
             :total="1000"
           >
@@ -122,14 +122,18 @@
     </div>
     <!-- addInfo新增病例弹框 -->
     <addInfo :flag.sync="dialog_flag" />
+    <!-- edit新增病例弹框 -->
+    <addInfo_edit :flag.sync="dialog_flag" />
   </div>
 </template>
 <script>
 import addInfo from "../../components/dialog/addInfo";
+import addInfo_edit from "../../components/dialog_edit/addInfo_edit"
+import timestampToTime from "../../utils/time";
 import { reactive, ref, watch, onMounted } from "@vue/composition-api";
 export default {
   name: "addCases",
-  components: { addInfo },
+  components: { addInfo,addInfo_edit},
   setup(props, { root }) {
     const date_value = ref("");
     const search_keyWork = ref("");
@@ -162,9 +166,9 @@ export default {
         idcard: "5002261966466336724",
         name: "王小虎",
         address: "和养殖大道1243243梵蒂冈发士大夫撒",
-        phone:"15025441733",
+        phone: "15025441733",
         age: 100,
-        date: "2020-2-3",
+        date: "1512152",
         user: "某某镇"
       },
       {
@@ -172,7 +176,7 @@ export default {
         name: "王小虎",
         address: "上海市普陀区金沙江路 1518 弄",
         age: 22,
-        date: "2020-2-3",
+        date: "151215",
         user: "某某镇"
       },
       {
@@ -180,7 +184,7 @@ export default {
         name: "王小虎",
         address: "上海市普陀区金沙江路 1518 弄",
         age: 22,
-        date: "2020-2-3",
+        date: "151215",
         user: "某某镇"
       }
     ]);
@@ -195,28 +199,26 @@ export default {
     };
 
     //删除
-    const deleteItem = () => {
+    const deleteItem = id => {
+      // console.log(id) //scope.row 是一条完整的数据
       root.confirm({
         content: "此操作将永久删除这条数据, 是否继续?",
-        fn:fn_confirm,
-        id:"13231311"
+        // fn: fn_confirm,
+        id: "13231311"
       });
     };
-    //删除全部
-    const deleteAll = () => {
-      root.confirm({
-        content: "此操作将永久删除全部文件, 是否继续?",
-        fn:fn_confirm,
-        id:"1312341"
-      });
-    };
+
     //这里调用删除接口
     const fn_confirm = value => {
-      console.log(value)
+      console.log(value);
+    };
+    //搜索操作
+    const search_run = () => {
+      console.log(date_value.value);
     };
 
     return {
-      deleteAll,
+      search_run,
       deleteItem,
       dialog_flag,
       date_value,

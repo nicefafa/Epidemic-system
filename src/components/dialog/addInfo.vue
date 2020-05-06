@@ -9,6 +9,7 @@
       <el-form
         :model="ruleForm"
         :rules="rules"
+        ref="ruleForm"
         label-width="100px"
         class="demo-ruleForm"
       >
@@ -139,7 +140,11 @@ export default {
     const submitForm = formName => {
       refs[formName].validate(valid => {
         if (valid) {
-          console.log("1111");
+          root.$message({
+            message: "添加成功",
+            type: "success"
+          });
+          refs[formName].resetFields();
         } else {
           console.log("error submit!!");
           return false;

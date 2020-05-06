@@ -1,7 +1,7 @@
 <template>
-  <div id="outInfo">
+  <div id="addInfo">
     <el-dialog
-      title="新增外出人员"
+      title="修改"
       :visible.sync="dialog_flag_status"
       @close="close"
       width="600px"
@@ -9,7 +9,7 @@
       <el-form
         :model="ruleForm"
         :rules="rules"
-         ref="ruleForm"
+        ref="ruleForm"
         label-width="100px"
         class="demo-ruleForm"
       >
@@ -28,12 +28,7 @@
         <el-form-item label="家庭地址" prop="adress">
           <el-input type="textarea" v-model="ruleForm.adress"></el-input>
         </el-form-item>
-        <el-form-item label="身体状况">
-          <el-select v-model="ruleForm.region" placeholder="请选择身体状况">
-            <el-option label="良好" value="shanghai"></el-option>
-            <el-option label="异常" value="beijing"></el-option>
-          </el-select>
-        </el-form-item>
+
         <el-form-item label="确诊时间" required>
           <el-col :span="11">
             <el-form-item prop="date">
@@ -65,7 +60,7 @@ import {
   validatePhone
 } from "../../utils/checkNumber";
 export default {
-  name: "outInfo",
+  name: "addInfo",
   props: {
     flag: {
       type: Boolean,
@@ -88,8 +83,7 @@ export default {
       phone: "",
       adress: "",
       date: "",
-      adress: "",
-      region: ""
+      adress: ""
     });
     //验证age
     var validateage = (rule, value, callback) => {

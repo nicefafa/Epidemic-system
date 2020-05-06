@@ -6,15 +6,11 @@
           <label for="">日期：&nbsp;&nbsp;</label>
           <div class="warp-content">
             <el-date-picker
-              style="width: 100%;"
               v-model="date_value"
-              type="datetimerange"
+              type="datetime"
+              placeholder="选择日期时间"
               format="yyyy 年 MM 月 dd 日"
-              value-format="yyyy-MM-dd HH:mm:ss"
-              align="right"
-              start-placeholder="开始日期"
-              end-placeholder="结束日期"
-              :default-time="['12:00:00', '08:00:00']"
+              value-format="yyyy-MM-dd"
             >
             </el-date-picker>
           </div>
@@ -86,7 +82,11 @@
           label="外出时间"
           width="150"
         ></el-table-column>
-        <el-table-column prop="status" label="身体状况" width="60"></el-table-column>
+        <el-table-column
+          prop="status"
+          label="身体状况"
+          width="60"
+        ></el-table-column>
         <el-table-column
           prop="user"
           label="管理人"
@@ -107,9 +107,7 @@
     <div class="bottom">
       <el-row>
         <el-col :span="9">
-          <el-button type="danger" size="medium" @click="deleteAll"
-            >批量删除</el-button
-          >
+          -
         </el-col>
         <el-col :span="15">
           <el-pagination
@@ -127,14 +125,16 @@
     </div>
     <!-- addInfo新增病例弹框 -->
     <outInfo :flag.sync="dialog_flag" />
+    <outInfo_edit :flag.sync="dialog_flag" />
   </div>
 </template>
 <script>
 import outInfo from "../../components/dialog/outInfo";
+import outInfo_edit from "../../components/dialog_edit/outInfo_edit"
 import { reactive, ref, watch, onMounted } from "@vue/composition-api";
 export default {
   name: "out",
-  components: { outInfo },
+  components: { outInfo,outInfo_edit },
   setup(props, { root }) {
     const date_value = ref("");
     const search_keyWork = ref("");
@@ -176,7 +176,7 @@ export default {
         name: "王小虎",
         address: "上海市普陀区金沙江路 1518 弄",
         age: 22,
-        phone:"15025441733",
+        phone: "15025441733",
         date: "2020-2-3",
         user: "某某镇"
       },
@@ -207,21 +207,13 @@ export default {
         id: "13231311"
       });
     };
-    //删除全部
-    const deleteAll = () => {
-      root.confirm({
-        content: "此操作将永久删除全部文件, 是否继续?",
-        fn: fn_confirm,
-        id: "1312341"
-      });
-    };
+
     //这里调用删除接口
     const fn_confirm = value => {
       console.log(value);
     };
 
     return {
-      deleteAll,
       deleteItem,
       dialog_flag,
       date_value,
