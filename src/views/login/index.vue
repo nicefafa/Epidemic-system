@@ -102,18 +102,22 @@ export default {
         username: ruleForm.username,
         password: ruleForm.pass
       };
-      // dispatch是用来调用actions
-      root.$store.dispatch('app/login',requestData).then((response)=>{
+     // dispatch是用来调用actions
+      // let requestData = JSON.stringify(Data)
+      root.$store.dispatch('app/login',requestData).then(response =>{
         console.log("登录成功")
         root.$router.push({
           name:"console"
         })
+      }).catch(error=>{
+        console.log(error)
       })
     };
+
     return {
       ruleForm,
       rules,
-      submitForm
+      submitForm,
     };
   }
   

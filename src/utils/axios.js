@@ -13,6 +13,7 @@ service.interceptors.request.use(function (config) {
     // 在发送请求之前做些什
     // config.headers["token"] = getToKen()
     // config.headers["username"] = getUserName()
+    console.log(config)
     return config;
 }, function (error) {
     // 对请求错误做些什么
@@ -25,7 +26,7 @@ service.interceptors.response.use(function (response) {
     // 对响应数据做点什么
     let data = response.data
     // 业务需求
-    if (data.resCode !== 0) {
+    if (data.code !== 200) {
         return Promise.reject(data);
     } else {
         return response;

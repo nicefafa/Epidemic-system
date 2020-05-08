@@ -107,7 +107,27 @@ const routes = [{
 
     ]
 
+  },
+  {
+    path: '/user',
+    name: 'user',
+    meta: {
+      name: "用户管理",
+      icon: "user"
+    },
+    component: layout,
+    children: [{
+        path: '/user/list',
+        name: 'admin_list',
+        meta: {
+          name: "用户列表"
+        },
+        component: () => import("../views/user/index")
+      }
+    ]
+
   }
+ 
 
 ]
 
