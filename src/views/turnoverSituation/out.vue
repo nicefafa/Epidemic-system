@@ -55,48 +55,53 @@
     <!-- 表格数据-->
     <div class="table">
       <el-table
-        :data="tableData"
+        :data="tableData.item"
         style="width: 100%"
         :row-class-name="tableRowClassName"
         border
       >
         <el-table-column
-          prop="idcard"
+          prop="inb"
           label="身份证号码"
           width="180"
         ></el-table-column>
         <el-table-column prop="name" label="姓名" width="100"></el-table-column>
         <el-table-column prop="age" label="年龄" width="60"></el-table-column>
         <el-table-column
-          prop="phone"
+          prop="tnb"
           label="电话号码"
           width="130"
         ></el-table-column>
         <el-table-column
-          prop="address"
+          prop="adress"
           label="家庭地址"
           width="260"
         ></el-table-column>
         <el-table-column
-          prop="date"
+          prop="time"
           label="外出时间"
           width="150"
         ></el-table-column>
         <el-table-column
           prop="status"
           label="身体状况"
-          width="60"
+          width="100"
         ></el-table-column>
         <el-table-column
-          prop="user"
+          prop="town.tname"
           label="管理人"
           width="115"
         ></el-table-column>
         <el-table-column label="操作">
           <!-- 编辑和删除-->
           <template slot-scope="scope">
-            <el-button size="mini" @click="dialog_flag = true">编辑</el-button>
-            <el-button size="mini" type="danger" @click="deleteItem"
+            <el-button size="mini" @click="edit_info(scope.row.id)"
+              >编辑</el-button
+            >
+            <el-button
+              size="mini"
+              type="danger"
+              @click="deleteItem(scope.row.id)"
               >删除</el-button
             >
           </template>
@@ -125,20 +130,24 @@
     </div>
     <!-- addInfo新增病例弹框 -->
     <outInfo :flag.sync="dialog_flag" />
-    <outInfo_edit :flag.sync="dialog_flag" />
+    <outInfo_edit :id="infoID" :flag.sync="dialog_flag_edit" />
   </div>
 </template>
 <script>
+import { Message } from "element-ui";
 import outInfo from "../../components/dialog/outInfo";
-import outInfo_edit from "../../components/dialog_edit/outInfo_edit"
+import { GetOutUserInfo, DeletOutUserInfo } from "../../api/out";
+import outInfo_edit from "../../components/dialog_edit/outInfo_edit";
 import { reactive, ref, watch, onMounted } from "@vue/composition-api";
 export default {
   name: "out",
-  components: { outInfo,outInfo_edit },
+  components: { outInfo, outInfo_edit },
   setup(props, { root }) {
     const date_value = ref("");
     const search_keyWork = ref("");
     const dialog_flag = ref(false);
+    const dialog_flag_edit = ref(false);
+
     /** 
     关键字选择器
     */
@@ -162,33 +171,9 @@ export default {
     /**
      表格数据
      */
-    const tableData = reactive([
-      {
-        idcard: "5002261966466336724",
-        name: "王小虎",
-        address: "和养殖大道1243243梵蒂冈发士大夫撒",
-        age: 22,
-        date: "2020-2-3",
-        user: "某某镇"
-      },
-      {
-        idcard: "5002261966466336724",
-        name: "王小虎",
-        address: "上海市普陀区金沙江路 1518 弄",
-        age: 22,
-        phone: "15025441733",
-        date: "2020-2-3",
-        user: "某某镇"
-      },
-      {
-        idcard: "5002261966466336724",
-        name: "王小虎",
-        address: "上海市普陀区金沙江路 1518 弄",
-        age: 22,
-        date: "2020-2-3",
-        user: "某某镇"
-      }
-    ]);
+    const tableData = reactive({
+      item: []
+    });
     /**
       分页
      */
@@ -198,22 +183,58 @@ export default {
     const handleCurrentChange = val => {
       page.pageNumber = val;
     };
+    //editinfo
+
+    const infoID = ref("");
+    const edit_info = id => {
+      infoID.value = id + "";
+      dialog_flag_edit.value = true;
+    };
 
     //删除
-    const deleteItem = () => {
+    const deleteItem_id = ref("");
+    const deleteItem = id => {
+      deleteItem_id.value = id;
       root.confirm({
         content: "此操作将永久删除这条数据, 是否继续?",
-        fn: fn_confirm,
-        id: "13231311"
+        fn: fn_confirm
       });
     };
 
     //这里调用删除接口
     const fn_confirm = value => {
-      console.log(value);
+      DeletOutUserInfo({ id: deleteItem_id.value })
+        .then(response => {
+          let data = response.data;
+          Message.success(data.massege);
+          getOutinfo();
+        })
+        .catch(error => {
+          console.log(error);
+        });
     };
+    //获取全部user信息
+    const getOutinfo = () => {
+      let reuquestData = {
+        tid: localStorage.getItem("tid")
+      };
+      GetOutUserInfo(reuquestData)
+        .then(response => {
+          console.log(response.data.result[0]);
+          let data = response.data.result;
+          tableData.item = data;
+        })
+        .catch(error => {});
+    };
+    onMounted(() => {
+      getOutinfo();
+    });
 
     return {
+      edit_info,
+      infoID,
+      deleteItem_id,
+      dialog_flag_edit,
       deleteItem,
       dialog_flag,
       date_value,

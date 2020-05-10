@@ -9,7 +9,7 @@
       <el-form
         :model="ruleForm"
         :rules="rules"
-         ref="ruleForm"
+        ref="ruleForm"
         label-width="100px"
         class="demo-ruleForm"
       >
@@ -30,8 +30,8 @@
         </el-form-item>
         <el-form-item label="身体状况">
           <el-select v-model="ruleForm.region" placeholder="请选择身体状况">
-            <el-option label="良好" value="shanghai"></el-option>
-            <el-option label="异常" value="beijing"></el-option>
+            <el-option label="良好" value="良好"></el-option>
+            <el-option label="异常" value="异常"></el-option>
           </el-select>
         </el-form-item>
         <el-form-item label="确诊时间" required>
@@ -42,6 +42,8 @@
                 placeholder="选择日期"
                 v-model="ruleForm.date"
                 style="width: 100%;"
+                format="yyyy 年 MM 月 dd 日"
+                value-format="yyyy-MM-dd"
               ></el-date-picker>
             </el-form-item>
           </el-col>
@@ -64,6 +66,7 @@ import {
   validateSfz,
   validatePhone
 } from "../../utils/checkNumber";
+import {AddComeBackUserInfo} from "../../api/comeBack"
 export default {
   name: "comeBackInfo",
   props: {
@@ -131,25 +134,36 @@ export default {
       age: [{ validator: validateage, trigger: "blur" }],
       idCard: [{ validator: validateidCard, trigger: "blur" }],
       phone: [{ validator: validatephone, trigger: "blur" }],
-      date: [
-        {
-          type: "date",
-          required: true,
-          message: "请选择日期",
-          trigger: "change"
-        }
-      ],
       adress: [{ required: true, message: "请填写家庭地址", trigger: "blur" }]
     });
 
-    //提交方法
+   //提交方法
     const submitForm = formName => {
       refs[formName].validate(valid => {
         if (valid) {
-         root.$message({
-            message: "添加成功",
-            type: "success"
-          });
+          let requestData = {
+            name: ruleForm.name,
+            age:ruleForm.age,
+            inb: ruleForm.idCard,
+            tnb: ruleForm.phone,
+            adress: ruleForm.adress,
+            time:ruleForm.date,
+            status:ruleForm.region,
+            tid:localStorage.getItem("tid")
+          };
+          AddComeBackUserInfo(requestData)
+            .then(response => {
+              console.log(response);
+              root.$message({
+                message: response.data.massege,
+                type: "success"
+              });
+             
+            })
+            .catch(error => {
+              console.log(error);
+            });
+
           refs[formName].resetFields();
         } else {
           console.log("error submit!!");
