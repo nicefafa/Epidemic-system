@@ -36,6 +36,8 @@
                 type="date"
                 placeholder="选择日期"
                 v-model="ruleForm.date"
+                format="yyyy 年 MM 月 dd 日"
+                value-format="yyyy-MM-dd"
                 style="width: 100%;"
               ></el-date-picker>
             </el-form-item>
@@ -59,6 +61,7 @@ import {
   validateSfz,
   validatePhone
 } from "../../utils/checkNumber";
+import {AddSusUserInfo} from "../../api/susCase"
 export default {
   name: "susInfo",
   props: {
@@ -125,25 +128,33 @@ export default {
       age: [{ validator: validateage, trigger: "blur" }],
       idCard: [{ validator: validateidCard, trigger: "blur" }],
       phone: [{ validator: validatephone, trigger: "blur" }],
-      date: [
-        {
-          type: "date",
-          required: true,
-          message: "请选择日期",
-          trigger: "change"
-        }
-      ],
       adress: [{ required: true, message: "请填写家庭地址", trigger: "blur" }]
     });
-
-    //提交方法
+//提交方法
     const submitForm = formName => {
       refs[formName].validate(valid => {
         if (valid) {
-          root.$message({
-            message: "添加成功",
-            type: "success"
-          });
+          let requestData = {
+            name: ruleForm.name,
+            age: ruleForm.age,
+            inb:ruleForm.idCard,
+            adress: ruleForm.adress,
+            tid:localStorage.getItem("tid"),
+            tnb:ruleForm.phone,
+            time:ruleForm.date,
+            sid:3
+          };
+          console.log(requestData)
+          AddSusUserInfo(requestData)
+            .then(response => {
+              root.$message({
+                message: response.data.massege,
+                type: "success"
+              });
+            })
+            .catch(error => {
+              console.log(error);
+            });
           refs[formName].resetFields();
         } else {
           console.log("error submit!!");

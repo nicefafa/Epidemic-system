@@ -53,7 +53,7 @@ import { validateUser, validatePwd } from "../../utils/checkNumber";
 import { Login } from "../../api/login";
 export default {
   name: "login",
-  setup(props, { root,refs }) {
+  setup(props, { root,refs,emit }) {
     // 验证用户名
     var validateUsername = (rule, value, callback) => {
       if (value === "") {

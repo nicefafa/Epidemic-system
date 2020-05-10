@@ -1,33 +1,7 @@
 <template>
   <div id="user">
-    <el-row :gutter="14">
-      <el-col :span="5">
-        <div class="label-wrap key-work">
-          <label for="">关键字：&nbsp;&nbsp;</label>
-          <div class="warp-content">
-            <el-select v-model="search_key">
-              <el-option
-                v-for="item in search_options"
-                :key="item.value"
-                :value="item.value"
-                :label="item.label"
-              ></el-option>
-            </el-select>
-          </div>
-        </div>
-      </el-col>
-      <el-col :span="5">
-        <el-input
-          v-model="search_keyWork"
-          placeholder="请输入内容"
-          style="width: 100%;"
-        ></el-input>
-      </el-col>
-      <el-col :span="2">
-        <el-button type="info" style="width:80%;">搜索</el-button>
-      </el-col>
-
-      <el-col :span="4">
+  <div class="box">
+    <el-col :span="4">
         <el-button
           type="danger"
           class="pull-right"
@@ -36,7 +10,7 @@
           >新增用户</el-button
         >
       </el-col>
-    </el-row>
+      </div>
     <!-- 表格数据-->
     <div class="table">
       <el-table
@@ -61,12 +35,12 @@
           label="用户密码"
           width="260"
         ></el-table-column>
-        <el-table-column prop="role" label="角色"></el-table-column>
+        <el-table-column prop="sz" label="角色"></el-table-column>
         <el-table-column label="操作">
           <!-- 编辑和删除-->
           <template slot-scope="scope">
-            <el-button size="mini" @click="dialog_flag = true">编辑</el-button>
-            <el-button size="mini" type="danger" @click="deleteItem"
+            <el-button size="mini" @click="edit_info(scope.row.id)">编辑</el-button>
+            <el-button size="mini" type="danger" @click="deleteItem(scope.row.id)"
               >删除</el-button
             >
           </template>
@@ -95,20 +69,24 @@
     </div>
     <!-- addInfo新增病例弹框 -->
     <addUser :flag.sync="dialog_flag" />
-    <addUser_edit :flag.sync="dialog_flag" />
+    <addUser_edit :id = "infoID" :flag.sync="dialog_flag_edit" @upUser="getUserinfo"  />
   </div>
 </template>
 <script>
 import addUser from "../../components/dialog/addUser";
 import addUser_edit from "../../components/dialog_edit/addUser_edit";
 import { reactive, ref, watch, onMounted } from "@vue/composition-api";
-import { GetUserInfo } from "../../api/user";
+import { GetUserInfo, DeleteItem, } from "../../api/user";
+import {
+    Message
+} from "element-ui";
 export default {
   name: "user",
   components: { addUser, addUser_edit },
   setup(props, { root }) {
     const search_keyWork = ref("");
     const dialog_flag = ref(false);
+
     /** 
     关键字选择器
     */
@@ -130,10 +108,19 @@ export default {
       return "";
     };
     /**
+     edit_info
+     */
+     const dialog_flag_edit = ref(false)
+     const infoID = ref("")
+     const edit_info = ((id)=>{
+       infoID.value = id + ""
+       dialog_flag_edit.value = true
+     })
+    /**
      表格数据
      */
     const tableData = reactive({
-      item:[]
+      item: []
     });
     /**
       分页
@@ -146,27 +133,45 @@ export default {
     };
 
     //删除
-    const deleteItem = () => {
+
+    const deleteItem_id = ref("");
+    const deleteItem = id => {
+      deleteItem_id.value = id;
+      // console.log(id)
       root.confirm({
         content: "此操作将永久删除这条数据, 是否继续?",
-        fn: fn_confirm,
-        id: "13231311"
+        fn: fn_confirm
       });
     };
-
     //这里调用删除接口
     const fn_confirm = value => {
-      console.log(value);
+      DeleteItem({id:deleteItem_id.value}).then(response=>{
+        let data = response.data
+        Message.success(data.massege);
+        getUserinfo()
+      }).catch(error=>{
+        console.log(error)
+      })
     };
     // 获取user信息的接口
     const getUserinfo = () => {
       GetUserInfo()
         .then(response => {
-          let data = response.data
-          tableData.item=data.result
+          let data = response.data;
+          tableData.item = data.result;
         })
         .catch(error => {});
     };
+    // //设置角色
+    // const getRole  =()=>{
+    //   const role_status = localStorage.getItem("admin_toKen")
+    //   if(role_status ==1){
+    //     root.role = "超级管理员"
+    //   }else{
+    //      root.role = "管理员"
+    //   }
+    //   return root.role
+    // }
     // 生命周期
     onMounted(() => {
       getUserinfo();
@@ -174,6 +179,11 @@ export default {
 
     return {
       deleteItem,
+      // deleteItem_id,
+     dialog_flag_edit,
+      getUserinfo,
+      edit_info,
+      infoID,
       dialog_flag,
       search_keyWork,
       search_key,
@@ -203,7 +213,9 @@ export default {
 .el-table .warning-row {
   background: oldlace;
 }
-
+.box{
+  padding-bottom: 20px;
+}
 .el-table .success-row {
   background: #f0f9eb;
 }

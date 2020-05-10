@@ -1,57 +1,57 @@
 import service from "../utils/axios"
 
 /**
- * 管理员信息接口
+ * 确诊人员接口 
  * 
  */
-export function GetUserInfo(data) {
+export function GetAddUserInfo(data) {
     return service.request({
         method: 'post',
-        url: 'boss/findAll',
+        url: 'admini/findUserBytidqq',
         data: data
     })
 }
 /**
- * 管理员信息接口
+ * 新增人员接口 
  * 
  */
-export function DeleteItem(data) {
+export function AddUserInfo(data) {
     return service.request({
         method: 'post',
-        url: 'boss/delet',
+        url: 'admini/add',
         data: data
     })
 }
 /**
- * 添加信息
+ * 删除人员接口 
  * 
  */
-export function AddItem(data) {
+export function DeleteAddUserInfo(data) {
     return service.request({
         method: 'post',
-        url: 'boss/add',
+        url: 'admini/delet',
         data: data
     })
 }
 /**
- * 更改信息
+ * 查询人员接口 
  * 
  */
-export function UpdateItem(data) {
+export function SelectAddUserInfo(data) {
     return service.request({
         method: 'post',
-        url: 'boss/update',
+        url: 'admini/getUserById',
         data: data
     })
 }
 /**
- * 获取单条信息
+ * 更新人员接口 
  * 
  */
-export function GetOneItem(data) {
+export function UpdateAddUserInfo(data) {
     return service.request({
         method: 'post',
-        url: 'boss/getAdminiById',
+        url: 'admini/update',
         data: data
     })
 }

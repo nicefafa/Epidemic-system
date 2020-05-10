@@ -11,7 +11,7 @@ export default {
                 type: params.type || "warning",
                 center: true
             }).then(() => {
-                params.fn && params.fn(params.id)
+                params.fn && params.fn()
             }).catch(() => {
             });
         }

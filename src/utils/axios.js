@@ -1,6 +1,8 @@
 import axios from 'axios'
 // import {getToKen,getUserName} from "./checkToken"
- 
+import {
+    Message
+} from "element-ui";
 //创建拦截器
 const BASEURL = process.env.NODE_ENV === "production" ? "" : "/devApi"
 const service = axios.create({
@@ -12,8 +14,8 @@ const service = axios.create({
 service.interceptors.request.use(function (config) {
     // 在发送请求之前做些什
     // config.headers["token"] = getToKen()
-    // config.headers["username"] = getUserName()
-    console.log(config)
+    // config.headers["Content-Type"] = "application/x-www-form-urlencoded"
+    
     return config;
 }, function (error) {
     // 对请求错误做些什么
@@ -27,6 +29,7 @@ service.interceptors.response.use(function (response) {
     let data = response.data
     // 业务需求
     if (data.code !== 200) {
+        Message.error(data.massege);
         return Promise.reject(data);
     } else {
         return response;

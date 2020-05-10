@@ -57,43 +57,48 @@
     <!-- 表格数据-->
     <div class="table">
       <el-table
-        :data="tableData"
+        :data="tableData.item"
         style="width: 100%"
         :row-class-name="tableRowClassName"
         border
       >
         <el-table-column
-          prop="idcard"
+          prop="inb"
           label="身份证号码"
           width="200"
         ></el-table-column>
         <el-table-column prop="name" label="姓名" width="100"></el-table-column>
         <el-table-column prop="age" label="年龄" width="60"></el-table-column>
         <el-table-column
-          prop="phone"
+          prop="tnb"
           label="电话号码"
           width="130"
         ></el-table-column>
         <el-table-column
-          prop="address"
+          prop="adress"
           label="家庭地址"
           width="300"
         ></el-table-column>
         <el-table-column
-          prop="date"
+          prop="time"
           label="确诊时间"
           width="150"
         ></el-table-column>
         <el-table-column
-          prop="user"
+          prop="town.tname"
           label="管理人"
           width="115"
         ></el-table-column>
         <el-table-column label="操作">
           <!-- 编辑和删除-->
           <template slot-scope="scope">
-            <el-button size="mini" @click="dialog_flag = true">编辑</el-button>
-            <el-button size="mini" type="danger" @click="deleteItem(scope.row)"
+            <el-button size="mini" @click="edit_info(scope.row.id)"
+              >编辑</el-button
+            >
+            <el-button
+              size="mini"
+              type="danger"
+              @click="deleteItem(scope.row.id)"
               >删除</el-button
             >
           </template>
@@ -123,17 +128,19 @@
     <!-- addInfo新增病例弹框 -->
     <addInfo :flag.sync="dialog_flag" />
     <!-- edit新增病例弹框 -->
-    <addInfo_edit :flag.sync="dialog_flag" />
+    <addInfo_edit :id="infoID" :flag.sync="dialog_flag_edit" />
   </div>
 </template>
 <script>
+import { Message } from "element-ui";
 import addInfo from "../../components/dialog/addInfo";
-import addInfo_edit from "../../components/dialog_edit/addInfo_edit"
+import addInfo_edit from "../../components/dialog_edit/addInfo_edit";
 import timestampToTime from "../../utils/time";
 import { reactive, ref, watch, onMounted } from "@vue/composition-api";
+import { GetAddUserInfo, DeleteAddUserInfo } from "../../api/addCase";
 export default {
   name: "addCases",
-  components: { addInfo,addInfo_edit},
+  components: { addInfo, addInfo_edit },
   setup(props, { root }) {
     const date_value = ref("");
     const search_keyWork = ref("");
@@ -161,33 +168,9 @@ export default {
     /**
      表格数据
      */
-    const tableData = reactive([
-      {
-        idcard: "5002261966466336724",
-        name: "王小虎",
-        address: "和养殖大道1243243梵蒂冈发士大夫撒",
-        phone: "15025441733",
-        age: 100,
-        date: "1512152",
-        user: "某某镇"
-      },
-      {
-        idcard: "5002261966466336724",
-        name: "王小虎",
-        address: "上海市普陀区金沙江路 1518 弄",
-        age: 22,
-        date: "151215",
-        user: "某某镇"
-      },
-      {
-        idcard: "5002261966466336724",
-        name: "王小虎",
-        address: "上海市普陀区金沙江路 1518 弄",
-        age: 22,
-        date: "151215",
-        user: "某某镇"
-      }
-    ]);
+    const tableData = reactive({
+      item: []
+    });
     /**
       分页
      */
@@ -199,28 +182,62 @@ export default {
     };
 
     //删除
+    const deleteItem_id = ref("");
     const deleteItem = id => {
-      // console.log(id) //scope.row 是一条完整的数据
+      deleteItem_id.value = id;
       root.confirm({
         content: "此操作将永久删除这条数据, 是否继续?",
-        // fn: fn_confirm,
-        id: "13231311"
+        fn: fn_confirm
       });
     };
 
     //这里调用删除接口
     const fn_confirm = value => {
-      console.log(value);
+      DeleteAddUserInfo({ id: deleteItem_id.value })
+        .then(response => {
+          let data = response.data;
+          Message.success(data.massege);
+          getAddinfo();
+        })
+        .catch(error => {
+          console.log(error);
+        });
     };
     //搜索操作
     const search_run = () => {
       console.log(date_value.value);
     };
+    //editinfo
+    const dialog_flag_edit = ref(false);
+    const infoID = ref("");
+    const edit_info = id => {
+      infoID.value = id + "";
+      dialog_flag_edit.value = true;
+    };
+    // 获取全部user信息
+    const getAddinfo = () => {
+      let reuquestData = {
+        tid: localStorage.getItem("tid")
+      };
+      GetAddUserInfo(reuquestData)
+        .then(response => {
+          console.log(response.data.result[0]);
+          let data = response.data.result;
+          tableData.item = data;
+        })
+        .catch(error => {});
+    };
+    onMounted(() => {
+      getAddinfo();
+    });
 
     return {
+      infoID,
+      deleteItem_id,
       search_run,
       deleteItem,
       dialog_flag,
+      dialog_flag_edit,
       date_value,
       search_keyWork,
       search_key,
@@ -228,7 +245,8 @@ export default {
       tableRowClassName,
       tableData,
       handleSizeChange,
-      handleCurrentChange
+      handleCurrentChange,
+      edit_info
     };
   }
 };

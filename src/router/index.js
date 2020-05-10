@@ -3,7 +3,8 @@ import VueRouter from 'vue-router'
 
 Vue.use(VueRouter)
 import layout from "@/views/layout/index"
-const routes = [{
+
+export const defaultRouteMap = [{
     path: '/',
     redirect: "login",
     hidden: true,
@@ -108,31 +109,29 @@ const routes = [{
     ]
 
   },
-  {
-    path: '/user',
-    name: 'user',
+]
+export const anayscRouteMap = [{
+    path: '/userman',
+    name: 'userman',
     meta: {
       name: "用户管理",
       icon: "user"
     },
     component: layout,
     children: [{
-        path: '/user/list',
-        name: 'admin_list',
-        meta: {
-          name: "用户列表"
-        },
-        component: () => import("../views/user/index")
-      }
-    ]
+      path: '/user/list',
+      name: 'admin_list',
+      meta: {
+        name: "用户列表"
+      },
+      component: () => import("../views/user/index")
+    }]
+  }]
 
-  }
- 
 
-]
 
 const router = new VueRouter({
-  routes
+  routes: defaultRouteMap
 })
 
 export default router

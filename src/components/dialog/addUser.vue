@@ -16,6 +16,9 @@
         <el-form-item label="镇名" prop="name">
           <el-input v-model="ruleForm.name"></el-input>
         </el-form-item>
+        <el-form-item label="镇编号" prop="num">
+          <el-input v-model="ruleForm.num"></el-input>
+        </el-form-item>
         <el-form-item label="邮箱" prop="email">
           <el-input v-model="ruleForm.email"></el-input>
         </el-form-item>
@@ -26,9 +29,9 @@
           <el-input v-model="ruleForm.password"></el-input>
         </el-form-item>
         <el-form-item label="角色选择">
-          <el-select v-model="ruleForm.role" placeholder="请选择角色">
-            <el-option label="普通管理员" value="shanghai"></el-option>
-            <el-option label="超级管理员" value="beijing"></el-option>
+          <el-select v-model="ruleForm.sz" placeholder="请选择角色">
+            <el-option label="普通管理员" value="普通管理员"></el-option>
+            <el-option label="超级管理员" value="超级管理员"></el-option>
           </el-select>
         </el-form-item>
 
@@ -46,9 +49,10 @@
 import { reactive, ref, watchEffect } from "@vue/composition-api";
 import {
   validateEmail,
-  validateSfz,
-  validatePhone
+  validatePwd,
+  validateUser
 } from "../../utils/checkNumber";
+import { AddItem } from "../../api/user";
 export default {
   name: "addInfo",
   props: {
@@ -64,6 +68,7 @@ export default {
      */
     const close = () => {
       emit("update:flag", false);
+      root.$emit("upUser")
     };
     //form表单
     const ruleForm = reactive({
@@ -71,7 +76,7 @@ export default {
       email: "",
       username: "",
       password: "",
-      role: []
+      sz: []
     });
     //验证email
     var validatemail = (rule, value, callback) => {
@@ -113,7 +118,7 @@ export default {
       email: [{ validator: validatemail, trigger: "blur" }],
       username: [{ validator: validateUsername, trigger: "blur" }],
       password: [{ validator: validatePass, trigger: "blur" }],
-      role: [
+      sz: [
         {
           type: "date",
           required: true,
@@ -127,10 +132,27 @@ export default {
     const submitForm = formName => {
       refs[formName].validate(valid => {
         if (valid) {
-          root.$message({
-            message: "添加成功",
-            type: "success"
-          });
+          let requestData = {
+            name: ruleForm.name,
+            email: ruleForm.email,
+            tid: ruleForm.num,
+            username: ruleForm.username,
+            password: ruleForm.password,
+            sz: ruleForm.sz
+          };
+          AddItem(requestData)
+            .then(response => {
+              console.log(response);
+              root.$message({
+                message: response.data.massege,
+                type: "success"
+              });
+             
+            })
+            .catch(error => {
+              console.log(error);
+            });
+
           refs[formName].resetFields();
         } else {
           console.log("error submit!!");

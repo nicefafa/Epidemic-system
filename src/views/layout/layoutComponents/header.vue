@@ -58,9 +58,8 @@ import { computed } from "@vue/composition-api";
 export default {
   name: "layoutHeader",
   setup(props, { root }) {
-    const username = computed(() => {
-      root.$store.state.app.username;
-    });
+
+    const username = localStorage.getItem("username")
     return {
       username
     };
@@ -68,7 +67,6 @@ export default {
   data(){
     return {
       fullscreen: false,
-      username: "合阳城",
       message: 2
     };
   },

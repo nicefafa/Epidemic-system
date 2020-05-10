@@ -1,29 +1,36 @@
-import cookie from "cookie_js";
-
 const adminToKen = "admin_toKen";
 const usernameKey = "username";
+const townid  ="tid"
 
+// token
 export function getToKen() {
-    return cookie.get(adminToKen);
+    return localStorage.getItem(adminToKen);
 }
-
-
 export function setToKen(toKen) {
-    return cookie.set(adminToKen, toKen);
+    return localStorage.setItem(adminToKen, toKen);
 }
-
 export function removeToKen(toKen) {
-    return cookie.remove(adminToKen);
+    return localStorage.removeItem(adminToKen);
 }
-
+// tid
+export function setTid(tid) {
+    return localStorage.setItem(townid, tid);
+}
+export function getTid() {
+    return localStorage.getItem(townid);
+}
+export function removeTid() {
+    return localStorage.removeItem(townid);
+}
+//username
 export function setUserName(value) {
-    return cookie.set(usernameKey, value);
+    return localStorage.setItem(usernameKey, value);
 }
 
 export function getUserName() {
-    return cookie.get(usernameKey);
+    return localStorage.getItem(usernameKey);
 }
 
 export function removeUserName() {
-    return cookie.remove(usernameKey);
+    return localStorage.removeItem(usernameKey);
 }
